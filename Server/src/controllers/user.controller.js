@@ -7,14 +7,17 @@ import bcrypt from "bcrypt"
 
 const registerUser = asyncHandler(async(req,res)=>{
     const {name,email,password,userType}=req.body;
+    console.log(req.body);
     const secretpassword=bcrypt.hashSync(password,10); // password encryption 
+    console.log(secretpassword);
     try {
-        const user=User.create(
+        const user=await User.create({
             name,
             email,
-            secretpassword,
-            userType
+            password: secretpassword,
+            userType}
         )
+        console.log(user);
 
         if(!user){
             throw new ApiError(400,"Error while creating new user!!");
@@ -25,7 +28,7 @@ const registerUser = asyncHandler(async(req,res)=>{
         .json(new ApiResponse(200,user,"User  Registered Successfully!!"))
 
     } catch (error) {
-        throw new ApiError(500,"Error while registering user !!!");
+        throw new ApiError(500,error.message);
     }
 })
 
@@ -37,13 +40,13 @@ const loginUser = asyncHandler(async(req,res)=>{
     }
 
     try {
-        const user= await User.findOne(email);
+        const user= await User.findOne({email});
 
         if(!user){
             throw new ApiError(400,"Incorrect email id!!")
         }
 
-        const isPasswordValid = bcrypt.compare(password,user.password);
+        const isPasswordValid =await bcrypt.compare(password,user.password);
 
         if(!isPasswordValid){
             throw new ApiError(400,"Wrong Password!!");
@@ -74,7 +77,7 @@ const loginUser = asyncHandler(async(req,res)=>{
         )
 
     } catch (error) {
-        throw new ApiError(400,"Error while login");
+        throw new ApiError(400,error.message);
     }
 
 })
