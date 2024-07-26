@@ -6,7 +6,13 @@ const userType = {
     SELLER:'SELLER'
 }
 
+const razorpayConfig={
+    key_id:'rzp_test_yhlBbwAK65HdVh',
+    key_secret:'kyMGAJUfymInSss8XfhSsLZw'
+}
+
 export {
     DB_NAME,
-    userType
+    userType,
+    razorpayConfig
 }

@@ -8,6 +8,6 @@ import { verifyJWT } from "../middleware/auth.middleware.js";
 const router=Router();
 
 router.route("/create").post(verifyJWT,createOrder);
-router.route("/myorder").post(verifyJWT,getOrderByUserId);
+router.route("/myorder").get(verifyJWT,getOrderByUserId);
 
 export default router;
