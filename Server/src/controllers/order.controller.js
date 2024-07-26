@@ -5,7 +5,7 @@ import {Order} from "../models/order.model.js"
 
 const getOrderByUserId  = asyncHandler(async(req,res)=>{
     try {
-        const orderData = await Order.find({user:req.userId});
+        const orderData = await Order.find({user:req.user._id});
         if(!orderData){
             throw new ApiError(404,"Order does not exist!!")
         }
@@ -29,7 +29,7 @@ const createOrder =  asyncHandler(async(req,res)=>{
         transaction_id:payment.transactionid,
         razorpay_order_id:payment.razorpay_order_id,
         payment_status:"success",
-        user:req.userId,
+        user:req.user._id,
         total:total,
         quantity:body.items.length
     } 
