@@ -7,8 +7,8 @@ const userType = {
 }
 
 const razorpayConfig={
-    key_id:'rzp_test_yhlBbwAK65HdVh',
-    key_secret:'kyMGAJUfymInSss8XfhSsLZw'
+    key_id:'rzp_test_EjSRopya5pvaMo',
+    key_secret:'gfJH2iGjXj1MgAJKS1moewYw'
 }
 
 export {
