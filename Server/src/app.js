@@ -17,9 +17,11 @@ app.use(cookieParser())
 
 /// routes 
 import userRouter from "./routes/user.routes.js"
-
+import bookRouter from "./routes/book.routes.js"
+ 
 // routes decleration 
 app.use("/api/v1/users",userRouter);
+app.use("/api/v1/books",bookRouter);
 
 
-export { app};
+export {app};
