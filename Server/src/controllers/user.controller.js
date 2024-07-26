@@ -62,9 +62,14 @@ const loginUser = asyncHandler(async(req,res)=>{
                 expiresIn:process.env.ACCESS_TOKEN_EXPIRY
             }
         )
+        const options = {
+            httpOnly:true,
+            secure:true
+        }   
 
         return res
         .status(200)
+        .cookie("token",token,options)
         .json(
             new ApiResponse(
                 200,
@@ -82,30 +87,18 @@ const loginUser = asyncHandler(async(req,res)=>{
 
 })
 
-const userFindOne = asyncHandler(async(req,res)=>{
-    try {
-        const userData = await User.findOne({_id:req.userId});
-        if(!userData){
-            throw new ApiError(400,"User does not exist");
-        }
-
-        return res
-        .status(200)
-        .json(
-            new ApiResponse(200,userData,"User fetched successfully!!")
-        )
-    } catch (error) {
-        throw new ApiError(500,error.message);
-    }
+const getCurrentUser = asyncHandler(async(req,res)=>{
+    return res
+    .status(200)
+    .json(new ApiResponse(200,req.user,"current user fetched successfully!!"));
 })
 
 const userUpdate = asyncHandler(async(req,res)=>{
     const body = req.body
-    console.log(body)
     const reqData = {
         name:body.name,
         email:body.email,
-        languages:body.language,
+        language:body.language,
         age:body.age,
         mobileNo:body.mobileNo,
         address:body.address,
@@ -113,7 +106,11 @@ const userUpdate = asyncHandler(async(req,res)=>{
     }
 
     try {
-        const updatedUser = await User.findOneAndUpdate({_id:req.userId},reqData); 
+        const updatedUser = await User.findOneAndUpdate(
+            {_id:req.user._id},
+            reqData,
+            {new:true}
+        ); 
 
         if(!updatedUser){
             throw new ApiError(500,"Error while updating user.")
@@ -126,13 +123,13 @@ const userUpdate = asyncHandler(async(req,res)=>{
         )
 
     } catch (error) {
-        throw new ApiResponse(400,error.message);
+        throw new ApiResponse(400,"Error while updating details");
     }
 })
 
 export {
     registerUser,
     loginUser,
-    userFindOne,
+    getCurrentUser,
     userUpdate
 }
